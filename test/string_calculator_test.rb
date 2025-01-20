@@ -13,4 +13,9 @@ class StringCalculatorTest < Minitest::Test
 
     assert_equal 0, sum
   end
+
+  def test_single_number_string_should_return_sum_same_as_the_number
+    sum = @calculator.add('1')
+    assert_equal 1, sum
+  end
 end
