@@ -28,10 +28,22 @@ class StringCalculator
 
   def parse_delimiter_and_numbers(string_numbers)
     if string_numbers.start_with?('//')
-      delimiter = string_numbers[2]
-      string_numbers = string_numbers[4..]
+      delimiter, string_numbers = parse_custom_delimiter(string_numbers)
     else
       delimiter = ','
+    end
+
+    [delimiter, string_numbers]
+  end
+
+  def parse_custom_delimiter(string_numbers)
+    if string_numbers[2] == '['
+      end_index = string_numbers.index("]\n")
+      delimiter = string_numbers[3...end_index]
+      string_numbers = string_numbers[(end_index + 2)..]
+    else
+      delimiter = string_numbers[2]
+      string_numbers = string_numbers[4..]
     end
 
     [delimiter, string_numbers]
