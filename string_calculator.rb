@@ -1,12 +1,22 @@
 # frozen_string_literal: true
 
 class StringCalculator
+  class NegativeNumbersAreNotAllowed < StandardError; end
+
   def add(string_numbers)
     0 if string_numbers.empty?
 
     delimiter, string_numbers = parse_delimiter_and_numbers(string_numbers)
 
-    string_numbers.split(/[#{delimiter}\\n]/).map(&:to_i).sum
+    numbers = string_numbers.split(/[#{delimiter}\\n]/).map(&:to_i)
+
+    negative_numbers = numbers.select(&:negative?)
+
+    unless negative_numbers.empty?
+      raise NegativeNumbersAreNotAllowed, "Negative numbers are not allowed: #{negative_numbers.join(', ')}"
+    end
+
+    numbers.sum
   end
 
   private
