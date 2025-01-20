@@ -3,12 +3,17 @@
 class StringCalculator
   class NegativeNumbersAreNotAllowed < StandardError; end
 
+  ALLOWED_MAX_LIMIT = 1000
+
   def add(string_numbers)
     0 if string_numbers.empty?
 
     delimiter, string_numbers = parse_delimiter_and_numbers(string_numbers)
 
-    numbers = string_numbers.split(/[#{delimiter}\\n]/).map(&:to_i)
+    numbers = string_numbers
+              .split(/[#{delimiter}\\n]/)
+              .map(&:to_i)
+              .reject { |number| number > ALLOWED_MAX_LIMIT }
 
     negative_numbers = numbers.select(&:negative?)
 

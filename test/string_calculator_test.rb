@@ -69,4 +69,16 @@ class StringCalculatorTest < Minitest::Test
 
     assert_equal 'Negative numbers are not allowed: -1, -3, -4', error.message
   end
+
+  def test_sum_ignores_numbers_greater_than_1000
+    sum = @calculator.add("1,2,\n1001\n")
+
+    assert_equal 3, sum
+  end
+
+  def test_sum_includes_numbers_upto_1000
+    sum = @calculator.add("//}\n1}2}\n1000\n")
+    
+    assert_equal 1003, sum
+  end
 end
