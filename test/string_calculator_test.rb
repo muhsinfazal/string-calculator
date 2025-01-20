@@ -20,13 +20,13 @@ class StringCalculatorTest < Minitest::Test
     assert_equal 1, sum
   end
 
-  def test_should_return_sum_for_two_number_string
+  def test_should_return_sum_for_two_number_string_separated_by_comma
     sum = @calculator.add('1,2')
 
     assert_equal 3, sum
   end
 
-  def test_should_return_sum_for_multiple_number_string
+  def test_should_return_sum_for_multiple_number_string_separated_by_comma
     sum = @calculator.add('1,2,3,4,5')
 
     assert_equal 15, sum
@@ -46,6 +46,12 @@ class StringCalculatorTest < Minitest::Test
 
   def test_should_return_sum_for_number_string_separated_by_multiple_commas
     sum = @calculator.add('1,,,2,,3,4')
+
+    assert_equal 10, sum
+  end
+
+  def test_should_return_sum_for_number_string_containing_new_lines
+    sum = @calculator.add('1\n2,3\n4')
 
     assert_equal 10, sum
   end
