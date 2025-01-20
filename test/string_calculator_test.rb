@@ -55,4 +55,10 @@ class StringCalculatorTest < Minitest::Test
 
     assert_equal 10, sum
   end
+
+  def test_supports_custom_delimiter
+    sum = @calculator.add('//;\n1;2\n4;;5')
+
+    assert_equal 12, sum
+  end
 end
