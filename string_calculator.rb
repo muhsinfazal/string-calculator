@@ -11,7 +11,7 @@ class StringCalculator
     delimiter, string_numbers = parse_delimiter_and_numbers(string_numbers)
 
     numbers = string_numbers
-              .split(/[#{delimiter}\\n]/)
+              .split(/#{delimiter}|\n/)
               .map(&:to_i)
               .reject { |number| number > ALLOWED_MAX_LIMIT }
 
@@ -27,25 +27,24 @@ class StringCalculator
   private
 
   def parse_delimiter_and_numbers(string_numbers)
-    if string_numbers.start_with?('//')
-      delimiter, string_numbers = parse_custom_delimiter(string_numbers)
-    else
-      delimiter = ','
-    end
+    return [',', string_numbers] unless string_numbers.start_with?('//')
 
-    [delimiter, string_numbers]
+    if string_numbers.start_with?('//[')
+      delimiters = extract_different_delimiters(string_numbers)
+      numbers_start = string_numbers.index("\n") + 1
+
+      [delimiters, string_numbers[numbers_start..]]
+    else
+      [string_numbers[2], string_numbers[4..]]
+    end
   end
 
-  def parse_custom_delimiter(string_numbers)
-    if string_numbers[2] == '['
-      end_index = string_numbers.index("]\n")
-      delimiter = string_numbers[3...end_index]
-      string_numbers = string_numbers[(end_index + 2)..]
-    else
-      delimiter = string_numbers[2]
-      string_numbers = string_numbers[4..]
-    end
+  def extract_different_delimiters(string_numbers)
+    delimiters_section = string_numbers[3..string_numbers.index("\n") - 2]
 
-    [delimiter, string_numbers]
+    delimiters_section
+      .split('][')
+      .map { |delimiter| Regexp.escape(delimiter) }
+      .join('|')
   end
 end
